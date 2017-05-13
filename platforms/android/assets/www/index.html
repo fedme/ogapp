@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' ws: 'unsafe-inline' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="msapplication-tap-highlight" content="no">
+        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
+        <link rel="stylesheet" type="text/css" href="css/index.css">
+        <link rel="stylesheet" type="text/css" href="css/ui.css">
+        <link rel="stylesheet" type="text/css" href="css/map-route.css">
+        <link rel="stylesheet" type="text/css" href="css/objects-questions.css">
+        <link rel="stylesheet" type="text/css" href="css/monsters-questions.css">
+        <title>OGApp</title>
+    </head>
+    <body>
+
+        <div id="topbar">OGApp v1.0.0 beta  <span id="stats-records"></span>  <span id="user-id"></span></div>
+
+        <div id="rt-start" class="route">
+            <h1>Enter your code:</h1>
+            <div class="initial-form">
+                <input type="number" name="uid-input" id="uid-input"><br>
+                <button id="btn-initial-form">Start</button>
+            </div>
+        </div>
+
+        <div id="rt-map-route" class="route">
+            <div class="map"><table id="table1"></table></div>
+            <div class="controls">
+                <button id="btn-cancel-single-cell-mode">Rubber</button>
+                <button id="btn-cancel-path">Clear</button><br>
+                <button id="btn-save-path">Save as path number 1</button>
+                <div class="history">
+                    <h2>Saved paths:</h2>
+                    <ol></ol>
+                    <button id="btn-choose-path">Choose selected path</button>
+                </div>
+            </div>
+        </div>
+
+        <div id="rt-objects-placement" class="route">
+            <h2>Experimenter: please place the objects as following:</h2>
+            <p>Go Bottom-up and from right to left, row after row</p>
+            <button id="btn-show-objects-placement">Show objects placement</button>
+            <ul></ul>
+            <button id="btn-go-objects-questions" class="hidden">Go to objects questions</button><br><br><br>
+        </div>
+
+        <div id="rt-objects-questions" class="route">
+            <h1>Hast du das Objekt gesehen?</h1>
+            <img>
+            <div class="answer-buttons">
+                <button id="btn-objects-question-yes">Ja</button>
+                <button id="btn-objects-question-no">Nein</button>
+            </div>    
+        </div>
+
+        <div id="rt-monsters-questions" class="route">
+            <h1>Hast du das Monster gesehen?</h1>
+            <img>
+            <div class="answer-buttons">
+                <button id="btn-monsters-question-yes">Ja</button>
+                <button id="btn-monsters-question-no">Nein</button>
+            </div>   
+        </div>
+
+        <div id="rt-end" class="route">
+            <h1>OGApp ENDE</h1>
+            <p id="debug-out"></p>
+            <br><br>
+            <button id="btn-app-restart">Restart App</button>
+        </div>
+
+        <script type="text/javascript" src="cordova.js"></script>
+        <script type="text/javascript" src="js/utils.js"></script>
+        <script type="text/javascript" src="js/index.js"></script>
+        <script type="text/javascript" src="js/map-route.js"></script>
+        <script type="text/javascript" src="js/objects-questions.js"></script>
+        <script type="text/javascript" src="js/monsters-questions.js"></script>
+    </body>
+</html>

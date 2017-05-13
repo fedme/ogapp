@@ -1,0 +1,74 @@
+#rt-map-route table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+#rt-map-route td {
+    border: 1px solid rgba(255, 255, 255, 0);
+    width: 27px;
+    height: 27px;
+    opacity: 0.6;
+}
+
+#rt-map-route td[data-selected="1"] {
+    background: black;
+}
+
+#rt-map-route td[data-selected="2"] {
+    background: orange;
+}
+
+#rt-map-route td[data-selected="3"] {
+    background: orangered;
+}
+
+#rt-map-route #table1 {
+    background-image: url('../img/map-a.png');
+    background-size: cover;
+}
+
+#rt-map-route .map {
+    float: left;
+    padding: 6px;
+}
+
+#rt-map-route .controls {
+    float: left;
+    clear: right;
+    padding: 25px;
+    margin-left: 25px;
+}
+
+#rt-map-route .controls .history {
+    margin-top: 20px;
+    font-size: x-large;
+}
+
+#rt-map-route .controls .history ol {
+    padding-left: 0;
+}
+
+#rt-map-route .controls .history li {
+    margin-bottom: 10px;
+    padding: 5px;
+    background-color: darkorange;
+    color: white;
+    list-style-type: none;
+    border: 2px solid white;
+}
+
+#rt-map-route .controls .history li[data-selected-path="true"] {
+    border-color: black;
+}
+
+#rt-map-route button {
+    margin-bottom: 25px;
+}
+
+#btn-cancel-single-cell-mode {
+    background-color: orangered;
+}
+
+#btn-cancel-path {
+    background-color: darkred;
+}
