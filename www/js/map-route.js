@@ -29,6 +29,22 @@ var MapRoute = {
     userPathIndex: null,
     drawingTime: 300000,
     startDrawingPathTimestamp : 0,
+
+    monsterCells : {
+        "12r_re_pipe" : { 'x': 6, 'y': 23},
+        "7r_ro_crown" : { 'x': 13, 'y': 21},
+        "3y_ro_hair" : { 'x': 8, 'y': 20},
+        "10r_re_viking" : { 'x': 18, 'y': 20},
+        "6y_re_wings" : { 'x': 10, 'y': 18},
+        "4y_re_elvis" : { 'x': 20, 'y': 18},
+        "2y_ro_horn" : { 'x': 5, 'y': 13},
+        "8r_ro_antenna" : { 'x': 20, 'y': 13},
+        "11r_re_beard" : { 'x': 8, 'y': 11},
+        "9r_ro_horns" : { 'x': 8, 'y': 11},
+        "1y_ro_wig" : { 'x': 18, 'y': 10},
+        "5y_re_mustache" : { 'x': 18, 'y': 5}
+
+    },
     //userNpcs: [],
 
     /**
@@ -138,6 +154,22 @@ var MapRoute = {
         MapRoute.userPathIndex = null;
         MapRoute.userPaths = [];
         MapRoute.CancelPath();
+    },
+
+
+    /**
+     * GetChosenPath
+     */
+     GetChosenPath: function() {
+        return MapRoute.userPaths[MapRoute.userPathIndex];
+     },
+
+
+    /**
+     * GetChosenPathMonsters()
+     */
+    GetChosenPathMonsters: function() {
+        return MapRoute.GetChosenPath().monsters;
     },
 
 
@@ -391,6 +423,25 @@ var MapRoute = {
 
         MapRoute.CancelPath();
         MapRoute.UpdateHistory();
+    },
+
+
+    /**
+     * GetMonsterCell()
+     */
+    GetMonsterCell: function(monster) {
+        if (monster == null) return null;
+        return MapRoute.monsterCells[monster];
+    },
+
+
+    /**
+     * IsMonsterCellCorrect()
+     */
+    IsMonsterCellCorrect: function(monster, cell) {
+        if (monster == null || cell == null) return null;
+        var monsterCell = MapRoute.GetMonsterCell(monster);
+        return (monsterCell.x === cell.x && monsterCell.y === cell.y);
     },
 
 

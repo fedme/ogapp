@@ -11,6 +11,7 @@
         <link rel="stylesheet" type="text/css" href="css/objects-questions.css">
         <link rel="stylesheet" type="text/css" href="css/monsters-questions.css">
         <link rel="stylesheet" type="text/css" href="css/path-memory.css">
+        <link rel="stylesheet" type="text/css" href="css/picked-monsters-questions.css">
         <title>OGApp</title>
     </head>
     <body>
@@ -25,6 +26,8 @@
             </div>
         </div>
 
+
+        <!-- MapRoute component -->
         <div id="rt-map-route" class="route">
             <div class="map"><table id="table1"></table></div>
             <div class="controls">
@@ -46,7 +49,10 @@
                 
             </div>
         </div>
+        <!-- /MapRoute component -->
 
+
+        <!-- OQ component -->
         <div id="rt-objects-placement" class="route">
             <h2>Experimenter: please place the objects as following:</h2>
             <p>Go Bottom-up and from right to left, row after row</p>
@@ -68,7 +74,10 @@
                 <button id="btn-objects-question-no">No</button>
             </div>    
         </div>
+        <!-- /OQ component -->
 
+
+        <!-- MQ component -->
         <div id="rt-monsters-questions-instructions" class="route">
             <h1>And now some questions about the monsters...</h1>
             <button id="btn-monsters-questions-start">Next</button>
@@ -82,15 +91,35 @@
                 <button id="btn-monsters-question-no">No</button>
             </div>   
         </div>
+        <!-- /MQ component -->
 
 
+        <!-- PathMemory component -->
         <div id="rt-path-memory-instructions" class="route">
             <h1>And now try to remember your path...</h1>
             <button id="btn-path-memory-start">Next</button>
         </div>
+        <!-- /PathMemory component -->
+
+
+        <!-- PMQ component -->
+        <div id="rt-picked-monsters-questions-instructions" class="route">
+            <h1>Now we are going to ask you which monsters you picked up on your way to school</h1>
+            <button id="btn-picked-monsters-questions-start">Next</button>
+        </div>
+
+        <div id="rt-picked-monsters-questions" class="route">
+            <h1>Have you picked up this monster on your way?</h1>
+            <img>
+            <div class="answer-buttons">
+                <button id="btn-picked-monsters-question-yes">Yes</button>
+                <button id="btn-picked-monsters-question-no">No</button>
+            </div>   
+        </div>
+        <!-- /PMQ component -->
 
         <div id="rt-end" class="route">
-            <h1>OGApp ENDE</h1>
+            <h1>OGApp END</h1>
             <p id="debug-out"></p>
             <br><br>
             <button id="btn-app-restart">Restart App</button>
@@ -103,5 +132,6 @@
         <script type="text/javascript" src="js/objects-questions.js"></script>
         <script type="text/javascript" src="js/monsters-questions.js"></script>
         <script type="text/javascript" src="js/path-memory.js"></script>
+        <script type="text/javascript" src="js/picked-monsters-questions.js"></script>
     </body>
 </html>
