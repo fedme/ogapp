@@ -54,7 +54,7 @@ var OQ = {
                 break;
         }
 
-        console.log('Received Event: ' + id);
+    
     },
 
 
@@ -81,6 +81,9 @@ var OQ = {
 
         OQ.buttons[3] = document.getElementById('btn-objects-question-no');
         OQ.buttons[3].addEventListener('click', OQ.AnswerNo);
+
+        OQ.buttons[4] = document.getElementById('btn-objects-questions-start');
+        OQ.buttons[4].addEventListener('click', function() { app.Goto('rt-objects-questions') });
 
     },
 
@@ -152,7 +155,7 @@ var OQ = {
         OQ.objects = app.ArrayShuffle(OQ.objects);
 
         OQ.AskQuestion();
-        app.Goto('rt-objects-questions');
+        app.Goto('rt-objects-questions-instructions');
     },
 
 

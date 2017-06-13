@@ -49,7 +49,7 @@ var app = {
                 break;
         }
 
-        console.log('Received Event: ' + id);
+    
     },
 
 
@@ -101,6 +101,8 @@ var app = {
         app.buttons[1] = document.getElementById('btn-app-restart');
         app.buttons[1].addEventListener('click', app.Restart);
 
+        app.buttons[2] = document.getElementById('stats-records');
+        app.buttons[2].addEventListener('click', app.SaveDataToFileDialog);
     },
 
 
@@ -224,8 +226,9 @@ var app = {
         var currentTimeStamp = new Date();
         app.data.date = currentTimeStamp;
         app.data.duration = (currentTimeStamp - app.initialTimeStamp) / 1000;
-        app.data.chosenPath = MapRoute.userPaths[MapRoute.userPathIndex];
-        app.data.allPaths = MapRoute.userPaths;
+       
+       app.GetDataFromMapRoute();
+
         app.data.objectsQuestions = OQ.userAnswers;
         app.data.monstersQuestions = MQ.userAnswers;
 
@@ -236,6 +239,20 @@ var app = {
 
         app.PrintDataDebug();
         
+    },
+
+
+    /**
+     * GetDataFromMapRoute()
+     */
+    GetDataFromMapRoute: function() {
+        // Copy data from MapRoute component
+        app.data.chosenPathIndex = MapRoute.userPathIndex;
+        app.data.chosenPath = MapRoute.userPaths[MapRoute.userPathIndex];
+        app.data.allPaths = MapRoute.userPaths;
+
+        // Resetting MapRoute component
+        MapRoute.reset();
     },
 
 
@@ -317,11 +334,11 @@ var app = {
 
                 for (var i = res.rows.length - 1; i >= 0; i--) {
                     records.push({'date': res.rows.item(i).date, 'uid': res.rows.item(i).uid, 'data': JSON.parse(res.rows.item(i).data)});
-                    console.log(records[i]);
+                    //console.log(records[i]);
                 }
 
-                $.post("https://isearch.raimaj.me/ogapp/savedata.php",{
-                    data: JSON.stringify(records),
+                app.Post("https://isearch.raimaj.me/ogapp/savedata.php",{
+                    data: JSON.stringify(records)
                 });
 
             }
@@ -330,6 +347,101 @@ var app = {
             console.log('SELECT SQL statement ERROR: ' + error.message);
         });
         
+    },
+
+
+    /**
+     * SaveDataToFileDialog()
+     */
+    SaveDataToFileDialog: function() {
+        navigator.notification.confirm(
+            'Do you want to export the data to a local json file?', // message
+            app.SaveDataToFile,            // callback to invoke with index of button pressed
+            'Export data?',           // title
+            ['Yes','No']     // buttonLabels
+        );
+    },
+
+
+    /**
+     * SaveDataToFile()
+     */
+    SaveDataToFile: function(buttonIndex) {
+
+        if (buttonIndex === 2) return;
+
+        app.db.executeSql('SELECT * FROM data', [], function(res) {
+
+            if (res.rows.length > 0) {
+                var records = [];
+
+                //for (var i = 0; i < res.rows.length; i++) {
+                //for (var i = res.rows.length - 1; i >= 0; i--) {
+                for (var i = 0; i < res.rows.length; i++) {
+                    records.push({'date': res.rows.item(i).date, 'uid': res.rows.item(i).uid, 'data': JSON.parse(res.rows.item(i).data)});
+                    //console.log(records[i]);
+                }
+
+                // preapre data to write in file
+                data = {"count": records.length, "records": records};
+
+                // build results file name
+                var currentdate = new Date(); 
+                var day = ("0" + currentdate.getDate()).slice(-2);
+                var month =  ("0" + (currentdate.getMonth() + 1)).slice(-2);
+                var filename = "data-" + day + month + currentdate.getFullYear() + "-"  + currentdate.getHours() + currentdate.getMinutes() + ".json";
+                console.log(filename);
+
+                // access file system
+                window.resolveLocalFileSystemURL(cordova.file.externalDataDirectory, 
+                    function(fs) {
+
+                        // get or create results file
+                        fs.getFile(filename, {create: true, exclusive: false}, 
+                            function(fileEntry) {
+                                console.log("fileEntry is file?" + fileEntry.isFile.toString());
+                                app.WriteJsonToFile(fileEntry, JSON.stringify(data));      
+                            },
+                            // write file error callback
+                            function(evt, where) {
+                                console.log("getFile error: "+ where + " :");
+                                console.log(JSON.stringify(evt));
+                            }
+                        );
+                
+                    },
+                    // filesystem error callback
+                    function(evt, where) {
+                        console.log("Resolve filesystem error: "+ where + " :");
+                        console.log(JSON.stringify(evt));
+                    }
+                );
+
+            }
+
+        // SQL error callback
+        }, function(error) {
+            console.log('SELECT SQL statement ERROR: ' + error.message);
+        });
+            
+    },
+
+
+    /**
+     * WriteJsonToFile
+     */
+    WriteJsonToFile: function(fileEntry, data) {
+        fileEntry.createWriter( function (writer) {
+                writer.onwriteend = function (evt) {
+                    console.log("File successfully created!");
+                };
+                writer.write(data);
+            },
+            function (evt, where) {
+                console.log("Error writing file " + where + " :");
+                console.log(JSON.stringify(evt));
+            }
+        );
     },
 
 
@@ -365,6 +477,34 @@ var app = {
 
             'monsters questions correct: ' + app.data.monstersQuestions.correct + '<br>' +
             'monsters questions wrong: ' + app.data.monstersQuestions.wrong + '<br><br>';
+    },
+
+
+    /**
+     * Post()
+     */
+    Post: function(path, params, method) {
+        method = method || "post"; // Set method to post by default if not specified.
+
+        // The rest of this code assumes you are not using a library.
+        // It can be made less wordy if you use one.
+        var form = document.createElement("form");
+        form.setAttribute("method", method);
+        form.setAttribute("action", path);
+
+        for(var key in params) {
+            if(params.hasOwnProperty(key)) {
+                var hiddenField = document.createElement("input");
+                hiddenField.setAttribute("type", "hidden");
+                hiddenField.setAttribute("name", key);
+                hiddenField.setAttribute("value", params[key]);
+
+                form.appendChild(hiddenField);
+            }
+        }
+
+        document.body.appendChild(form);
+        form.submit();
     }
 
 

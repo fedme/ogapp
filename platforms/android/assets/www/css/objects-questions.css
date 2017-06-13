@@ -24,3 +24,15 @@
     margin-left: 100px;
     background-color: darkred;
 }
+
+#rt-objects-questions-instructions {
+    margin: auto;
+    width: 60%;
+    text-align: center;
+}
+
+#rt-objects-questions-instructions h1 {
+    margin-top: 200px;
+    margin-bottom: 70px;
+    font-size: xx-large;
+}

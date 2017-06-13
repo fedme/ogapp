@@ -1,3 +1,15 @@
+#rt-monsters-questions-instructions {
+    margin: auto;
+    width: 60%;
+    text-align: center;
+}
+
+#rt-monsters-questions-instructions h1 {
+    margin-top: 200px;
+    margin-bottom: 70px;
+    font-size: xx-large;
+}
+
 #rt-monsters-questions {
     margin: auto;
     width: 60%;

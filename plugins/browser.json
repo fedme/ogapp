@@ -24,7 +24,14 @@
         },
         "com.oddmouse.plugins.locktask": {
             "PACKAGE_NAME": "de.mpg.isearch.ogapp"
+        },
+        "cordova-plugin-file": {
+            "PACKAGE_NAME": "de.mpg.isearch.ogapp"
         }
     },
-    "dependent_plugins": {}
+    "dependent_plugins": {
+        "cordova-plugin-compat": {
+            "PACKAGE_NAME": "de.mpg.isearch.ogapp"
+        }
+    }
 }

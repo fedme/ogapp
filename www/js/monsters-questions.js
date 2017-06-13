@@ -53,7 +53,7 @@ var MQ = {
                 break;
         }
 
-        console.log('Received Event: ' + id);
+      
     },
 
 
@@ -76,6 +76,9 @@ var MQ = {
         MQ.buttons[1] = document.getElementById('btn-monsters-question-no');
         MQ.buttons[1].addEventListener('click', MQ.AnswerNo);
 
+        MQ.buttons[2] = document.getElementById('btn-monsters-questions-start');
+        MQ.buttons[2].addEventListener('click', function() { app.Goto('rt-monsters-questions') });
+
     },
 
 
@@ -85,7 +88,7 @@ var MQ = {
     Start: function() {
         console.log('MQ start');
 
-        app.Goto('rt-monsters-questions');
+        app.Goto('rt-monsters-questions-instructions');
 
         // concat and shuffle presented and distractor objects
         MQ.monsters = MQ.monstersPresented.concat(MQ.monstersDistractors);
@@ -189,8 +192,7 @@ var MQ = {
      * End()
      */
     End: function() {
-        //MQ.Start();
-        app.End();
+        PathMemory.Start();
     }
 
 

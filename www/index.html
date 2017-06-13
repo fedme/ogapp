@@ -10,11 +10,12 @@
         <link rel="stylesheet" type="text/css" href="css/map-route.css">
         <link rel="stylesheet" type="text/css" href="css/objects-questions.css">
         <link rel="stylesheet" type="text/css" href="css/monsters-questions.css">
+        <link rel="stylesheet" type="text/css" href="css/path-memory.css">
         <title>OGApp</title>
     </head>
     <body>
 
-        <div id="topbar">OGApp v1.0.0 beta  <span id="stats-records"></span>  <span id="user-id"></span></div>
+        <div id="topbar">OGApp v1.1.0  <span id="stats-records"></span>  <span id="user-id"></span></div>
 
         <div id="rt-start" class="route">
             <h1>Enter your code:</h1>
@@ -30,11 +31,19 @@
                 <button id="btn-cancel-single-cell-mode">Rubber</button>
                 <button id="btn-cancel-path">Clear</button><br>
                 <button id="btn-save-path">Save as path number 1</button>
+
                 <div class="history">
                     <h2>Saved paths:</h2>
                     <ol></ol>
                     <button id="btn-choose-path">Choose selected path</button>
                 </div>
+
+                <!-- PathMemory component -->
+                <h2 id="instr-save-path-memory" class="hidden"></h2>
+                <button id="btn-save-path-memory" class="hidden">Save path</button>
+                <button id="btn-save-path-memory-cells" class="hidden">Save cells</button>
+                <!-- /PathMemory component -->
+                
             </div>
         </div>
 
@@ -46,22 +55,38 @@
             <button id="btn-go-objects-questions" class="hidden">Go to objects questions</button><br><br><br>
         </div>
 
+        <div id="rt-objects-questions-instructions" class="route">
+            <h1>Are you ready? <br>We are going to ask you some questions...</h1>
+            <button id="btn-objects-questions-start">Next</button>
+        </div>
+
         <div id="rt-objects-questions" class="route">
-            <h1>Hast du das Objekt gesehen?</h1>
+            <h1>Have you seen this object?</h1>
             <img>
             <div class="answer-buttons">
-                <button id="btn-objects-question-yes">Ja</button>
-                <button id="btn-objects-question-no">Nein</button>
+                <button id="btn-objects-question-yes">Yes</button>
+                <button id="btn-objects-question-no">No</button>
             </div>    
         </div>
 
+        <div id="rt-monsters-questions-instructions" class="route">
+            <h1>And now some questions about the monsters...</h1>
+            <button id="btn-monsters-questions-start">Next</button>
+        </div>
+
         <div id="rt-monsters-questions" class="route">
-            <h1>Hast du das Monster gesehen?</h1>
+            <h1>Have you seen this monster on the map?</h1>
             <img>
             <div class="answer-buttons">
-                <button id="btn-monsters-question-yes">Ja</button>
-                <button id="btn-monsters-question-no">Nein</button>
+                <button id="btn-monsters-question-yes">Yes</button>
+                <button id="btn-monsters-question-no">No</button>
             </div>   
+        </div>
+
+
+        <div id="rt-path-memory-instructions" class="route">
+            <h1>And now try to remember your path...</h1>
+            <button id="btn-path-memory-start">Next</button>
         </div>
 
         <div id="rt-end" class="route">
@@ -77,5 +102,6 @@
         <script type="text/javascript" src="js/map-route.js"></script>
         <script type="text/javascript" src="js/objects-questions.js"></script>
         <script type="text/javascript" src="js/monsters-questions.js"></script>
+        <script type="text/javascript" src="js/path-memory.js"></script>
     </body>
 </html>

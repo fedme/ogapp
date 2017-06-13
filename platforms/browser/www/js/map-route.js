@@ -6,6 +6,7 @@ var MapRoute = {
     /**
      * Properties
      */
+    mode: 'map-route',
     first : true,
     lastCell : null,
     table : null,
@@ -25,7 +26,9 @@ var MapRoute = {
         { 'x': 18, 'y': 10, 'npc1': '1y_ro_wig'}, { 'x': 23, 'y': 10}, { 'x': 3, 'y': 9}, { 'x': 8, 'y': 9}, { 'x': 13, 'y': 9}, { 'x': 18, 'y': 9}, { 'x': 23, 'y': 9}, { 'x': 3, 'y': 8}, { 'x': 4, 'y': 8}, { 'x': 5, 'y': 8}, { 'x': 6, 'y': 8}, { 'x': 7, 'y': 8}, { 'x': 8, 'y': 8}, { 'x': 9, 'y': 8}, { 'x': 10, 'y': 8}, { 'x': 11, 'y': 8}, { 'x': 12, 'y': 8}, { 'x': 13, 'y': 8}, { 'x': 14, 'y': 8}, { 'x': 15, 'y': 8}, { 'x': 16, 'y': 8}, { 'x': 17, 'y': 8}, { 'x': 18, 'y': 8}, { 'x': 19, 'y': 8}, { 'x': 20, 'y': 8}, { 'x': 21, 'y': 8}, { 'x': 22, 'y': 8}, { 'x': 23, 'y': 8}, { 'x': 3, 'y': 7}, { 'x': 8, 'y': 7}, { 'x': 13, 'y': 7}, { 'x': 18, 'y': 7}, { 'x': 23, 'y': 7}, { 'x': 3, 'y': 6}, { 'x': 8, 'y': 6}, { 'x': 13, 'y': 6}, { 'x': 18, 'y': 6}, { 'x': 23, 'y': 6}, { 'x': 3, 'y': 5}, { 'x': 8, 'y': 5}, { 'x': 13, 'y': 5}, 
         { 'x': 18, 'y': 5, 'npc1': '5y_re_mustache'}, { 'x': 23, 'y': 5}, { 'x': 3, 'y': 4}, { 'x': 8, 'y': 4}, { 'x': 13, 'y': 4}, { 'x': 18, 'y': 4}, { 'x': 23, 'y': 4}, { 'x': 1, 'y': 3}, { 'x': 2, 'y': 3}, { 'x': 3, 'y': 3}, { 'x': 4, 'y': 3}, { 'x': 5, 'y': 3}, { 'x': 6, 'y': 3}, { 'x': 7, 'y': 3}, { 'x': 8, 'y': 3}, { 'x': 9, 'y': 3}, { 'x': 10, 'y': 3}, { 'x': 11, 'y': 3}, { 'x': 12, 'y': 3}, { 'x': 13, 'y': 3}, { 'x': 14, 'y': 3}, { 'x': 15, 'y': 3}, { 'x': 16, 'y': 3}, { 'x': 17, 'y': 3}, { 'x': 18, 'y': 3}, { 'x': 19, 'y': 3}, { 'x': 20, 'y': 3}, { 'x': 21, 'y': 3}, { 'x': 22, 'y': 3}, { 'x': 23, 'y': 3}, { 'x': 24, 'y': 3}, { 'x': 25, 'y': 3}, { 'x': 3, 'y': 2}, { 'x': 23, 'y': 2}, { 'x': 3, 'y': 1}, { 'x': 23, 'y': 1}],    
     userPaths: [],
-    userPathIndex: 0,
+    userPathIndex: null,
+    drawingTime: 300000,
+    startDrawingPathTimestamp : 0,
     //userNpcs: [],
 
     /**
@@ -48,7 +51,6 @@ var MapRoute = {
      * Cordova: ReceivedEvent()
      */
     ReceivedEvent: function(id) {
-        console.log('Received Event: ' + id);
         switch (id) {
             case 'deviceready':
                 MapRoute.Setup();
@@ -107,9 +109,35 @@ var MapRoute = {
 
         var cells = document.querySelectorAll('#table1 td');
         for (var i=0; i < cells.length; i++) {
-            cells[i].addEventListener('click', MapRoute.CancelSingleCell);
+            cells[i].addEventListener('click', MapRoute.TappedSingleCell);
         }
 
+    },
+
+
+    /**
+     * SetMode()
+     */
+    SetMode: function(mode) {
+        MapRoute.mode = mode;
+    },
+
+
+    /**
+     * IsInMode()
+     */
+    IsInMode: function(mode) {
+        return MapRoute.mode === mode;
+    },
+
+
+    /**
+     * Reset()
+     */
+    Reset: function() {
+        MapRoute.userPathIndex = null;
+        MapRoute.userPaths = [];
+        MapRoute.CancelPath();
     },
 
 
@@ -191,6 +219,38 @@ var MapRoute = {
 
 
     /**
+     * DrawingTimeUp()
+     */
+    DrawingTimeUp: function() {
+        if (MapRoute.userPathIndex != null || !MapRoute.IsInMode('map-route')) return;
+        navigator.notification.beep(4);
+        navigator.notification.alert(
+            'Drawing time is up!',  // message
+             null,         // callback
+            'The time for drawing has ended!',            // title
+            'OK'                  // buttonName
+        );
+
+    },
+
+
+    /**
+     * DrawingHalfTimeUp()
+     */
+    DrawingHalfTimeUp: function() {
+        if (MapRoute.userPathIndex != null || !MapRoute.IsInMode('map-route')) return;
+        navigator.notification.beep(2);
+        navigator.notification.alert(
+            'Only half time remaining for drawing!',  // message
+             null,         // callback
+            'Half time passed!',            // title
+            'OK'                  // buttonName
+        );
+
+    },
+
+
+    /**
      * TouchMoveHandler()
      */
     TouchMoveHandler: function(evt) {
@@ -202,12 +262,24 @@ var MapRoute = {
             el = evt.touches[i];
             currentCell = document.elementFromPoint(el.clientX, el.clientY);
 
+            // if cell is selectebale  and contigous with path
             if (currentCell != MapRoute.lastCell && MapRoute.IsCell(currentCell) && MapRoute.IsNextToPath(currentCell) && MapRoute.IsSelectable(currentCell)) {
                 MapRoute.lastCell = currentCell;
                 
                 MapRoute.SelectCell(MapRoute.lastCell);
 
-                if (MapRoute.first) MapRoute.first = false;
+                // if it's the first drawn cell of the path
+                if (MapRoute.first) {
+                    MapRoute.first = false;
+
+                    MapRoute.startDrawingPathTimestamp = new Date();
+
+                    // if it is the first cell of the first path ever drawn
+                    if (MapRoute.userPaths.length == 0) {
+                        setTimeout(MapRoute.DrawingHalfTimeUp, MapRoute.drawingTime / 2);
+                        setTimeout(MapRoute.DrawingTimeUp, MapRoute.drawingTime);
+                    }
+                }
                 
             }
         }    
@@ -270,13 +342,15 @@ var MapRoute = {
         });
 
         // Saving path 
-        var pathIndex = MapRoute.userPaths.length;
-        MapRoute.userPaths[pathIndex] = {
+        var currentTimeStamp = new Date();
+        
+         var pathTemp = {
             'pathLength' : path.length,
             'pathTurns' : MapRoute.CountPathTurns(path),
             'pathCells' : path,
             'nMonsters' : 0,
-            'monsters' : []
+            'monsters' : [],
+            'drawingTime' : (currentTimeStamp - MapRoute.startDrawingPathTimestamp) / 1000
         };
 
         // Saving monsters
@@ -284,19 +358,36 @@ var MapRoute = {
             for (var j=0; j < path[i].npcs.length; j++) {
                 var found = false;
                 var npc = path[i].npcs[j];
-                for (var w=0; w < MapRoute.userPaths[pathIndex].monsters.length; w++) {
-                    if (MapRoute.userPaths[pathIndex].monsters[w] == npc) {
+                for (var w=0; w < pathTemp.monsters.length; w++) {
+                    if (pathTemp.monsters[w] == npc) {
                         found = true;
                         break;
                     }
                 }
-                if (!found) MapRoute.userPaths[pathIndex].monsters.push(npc);
+                if (!found) pathTemp.monsters.push(npc);
             }
         }
 
-        MapRoute.userPaths[pathIndex].nMonsters = MapRoute.userPaths[pathIndex].monsters.length;
+        pathTemp.nMonsters = pathTemp.monsters.length;
 
-        console.log(MapRoute.userPaths);
+
+        /**
+         * MODE: map-route
+         */ 
+        if (MapRoute.IsInMode('map-route')) {
+            // Saving path
+            var pathIndex = MapRoute.userPaths.length;
+            MapRoute.userPaths[pathIndex] = pathTemp;
+        }
+
+
+        /**
+         * MODE: path-memory
+         */ 
+        if (MapRoute.IsInMode('path-memory')) {
+            return pathTemp;
+        }
+
 
         MapRoute.CancelPath();
         MapRoute.UpdateHistory();
@@ -322,7 +413,7 @@ var MapRoute = {
 
 
     /**
-     * OLD IsNextToPath()
+     * IsNextToPath()
      */
     IsNextToPath: function(cell) {
         if (MapRoute.first) {
@@ -397,13 +488,23 @@ var MapRoute = {
 
 
     /**
-     * CancelSingleCell()
+     * TappedSingleCell()
      */
-    CancelSingleCell: function(evt) {
+    TappedSingleCell: function(evt) {
+
+        console.log('tapped single cell');
+
         if (MapRoute.cancelSingleCellMode) {
             var times = MapRoute.GetSelectedTimes(evt.target) > 0 ? MapRoute.GetSelectedTimes(evt.target) - 1 : 0;
             evt.target.setAttribute('data-selected', times);
         }
+
+        if (MapRoute.IsInMode('path-memory-monster-cells')) {
+            var selected = evt.target.getAttribute('data-path-memory-selected');
+            var selected = (parseInt(selected) === 0 || selected == null) ? 1 : 0;
+            evt.target.setAttribute('data-path-memory-selected', selected);
+        }
+
     },
 
 
