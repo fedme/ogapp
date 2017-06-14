@@ -185,6 +185,7 @@ var PMQ = {
      */
     End: function() {
         console.log('PMQ end');
+        PathMemory.StartMonsterCells();
     }
 
 

@@ -10,6 +10,8 @@ var PathMemory = {
     rememberedPath : null,
     rememberedCells: [],
     instructions: null,
+    currentQuestion: 0,
+    monsterCells: {}, // will contain association between monsters and their cell
 
 
     /**
@@ -102,6 +104,72 @@ var PathMemory = {
 
 
     /**
+     * StartMonsterCells()
+     */
+    StartMonsterCells: function() {
+        
+        PathMemory.chosenMonsters = PMQ.GetChosenMonsters();
+
+        PathMemory.AskQuestion();
+
+        MapRoute.SetMode('path-memory-choose-monster-cell');
+
+        app.Goto('rt-map-route');
+    },
+
+
+    /**
+     * AskQuestion()
+     */
+    AskQuestion: function() {
+
+        if (PathMemory.currentQuestion >= PathMemory.chosenMonsters.length) return PathMemory.End();
+
+        var currentMonster = PathMemory.chosenMonsters[PathMemory.currentQuestion];
+
+        PathMemory.instructions.innerHTML = "Please tap on the purple cell where yoy picked up this monster:";
+        var node = document.getElementById('path-memory-monster-img');
+        node.style.display = "block";
+        node.setAttribute('src', 'img/monsters/' + currentMonster + '.png');
+        node.setAttribute('data-monster', currentMonster);
+    },
+
+
+    /**
+     * AnswerQuestion()
+     * called by MapRoute in TappedSingleCell()
+     */
+    AnswerQuestion: function(cell) {
+        if (cell == null) return;
+        if (!PathMemory.IsChosenCell(cell)) return;
+
+        PathMemory.monsterCells[PathMemory.chosenMonsters[PathMemory.currentQuestion]] = cell;
+
+        PathMemory.currentQuestion++;
+        PathMemory.AskQuestion();
+
+    },
+
+
+    /**
+     * IsChosenCell()
+     */
+    IsChosenCell: function(cell) {
+        var chosenCells = PathMemory.GetChosenCells();
+        var found = false;
+        for (var i=0; i < chosenCells.length; i++) {
+            var chosenCell = chosenCells[i];
+            if (app.IsSameCell(cell, chosenCell)) {
+                found = true;
+                break;
+            }
+        }
+        console.log('not a chosen cell!');
+        return found;
+    },
+
+
+    /**
      * GetChosenCells()
      */
     GetChosenCells: function() {
@@ -174,8 +242,22 @@ var PathMemory = {
         }
         console.log(PathMemory.rememberedCells);
 
+        document.getElementById('btn-save-path-memory-cells').style.display = "none";
+
+
+
         PMQ.Start();
-    }
+    },
+
+
+    /**
+     * End()
+     */
+     End: function() {
+        console.log('PathMemory end');
+        app.End();
+     }
+
 
 };
 

@@ -556,6 +556,11 @@ var MapRoute = {
             evt.target.setAttribute('data-path-memory-selected', selected);
         }
 
+        if (MapRoute.IsInMode('path-memory-choose-monster-cell')) {
+            var cell = {"x": evt.target.getAttribute('data-x'), "y": evt.target.getAttribute('data-y')};
+            PathMemory.AnswerQuestion(cell);
+        }
+
     },
 
 

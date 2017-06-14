@@ -202,6 +202,14 @@ var app = {
 
 
     /**
+     * IsSameCell()
+     */
+    IsSameCell: function(cell1, cell2) {
+        return (cell1.x == cell2.x && cell1.y == cell2.y);
+    },
+
+
+    /**
      * End()
      */
     End: function() {
@@ -251,8 +259,6 @@ var app = {
         app.data.chosenPath = MapRoute.userPaths[MapRoute.userPathIndex];
         app.data.allPaths = MapRoute.userPaths;
 
-        // Resetting MapRoute component
-        MapRoute.reset();
     },
 
 
