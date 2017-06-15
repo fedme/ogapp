@@ -228,7 +228,14 @@ var MapRoute = {
         var pathIndex = parseInt(selections[0].getAttribute('data-path-index'));
         console.log('You have chosen path ' + pathIndex);
         MapRoute.userPathIndex = pathIndex;
-        OQ.Start();
+
+        if (app.data.orderFirst == "oq") {
+            OQ.Start();
+        }
+        else {
+            PathMemory.Start();
+        }
+        
     },
 
 
@@ -557,8 +564,8 @@ var MapRoute = {
         }
 
         if (MapRoute.IsInMode('path-memory-choose-monster-cell')) {
-            var cell = {"x": evt.target.getAttribute('data-x'), "y": evt.target.getAttribute('data-y')};
-            PathMemory.AnswerQuestion(cell);
+            var cell = {"x": parseInt(evt.target.getAttribute('data-x')), "y": parseInt(evt.target.getAttribute('data-y'))};
+            PathMemory.AnswerQuestionDialog(cell);
         }
 
     },

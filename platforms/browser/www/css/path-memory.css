@@ -18,3 +18,15 @@
     max-width: 260px;
     margin-bottom: 30px;
 }
+
+#rt-path-memory-choose-monster-cell-instr {
+    margin: auto;
+    width: 60%;
+    text-align: center;
+}
+
+#rt-path-memory-choose-monster-cell-instr h1 {
+    margin-top: 200px;
+    margin-bottom: 70px;
+    font-size: xx-large;
+}

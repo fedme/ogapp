@@ -192,7 +192,7 @@ var MQ = {
      * End()
      */
     End: function() {
-        PathMemory.Start();
+        app.End();
     }
 
 

@@ -292,7 +292,14 @@ var OQ = {
      * End()
      */
     End: function() {
-        MQ.Start();
+
+        if (app.data.orderFirst == "oq") { // OQ was first, so start PathMemory
+            PathMemory.Start();
+        }
+        else { // OQ was second, so start MQ
+            MQ.Start();
+        }
+        
     }
 
 

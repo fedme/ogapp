@@ -7,3 +7,4 @@ Array.prototype.clean = function(deleteValue) {
     }
     return this;
 };
+

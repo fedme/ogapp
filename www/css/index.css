@@ -47,4 +47,39 @@ h1 {
     text-align:center;
 }
 
+#rt-choose-condition {
+    margin: auto;
+    width: 60%;
+    text-align: center;
+}
+
+#rt-choose-condition h1 {
+    margin-top: 50px;
+    margin-bottom: 20px;
+    font-size: xx-large;
+}
+
+#rt-choose-condition button {
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+
+#rt-choose-order {
+    margin: auto;
+    width: 60%;
+    text-align: center;
+}
+
+#rt-choose-order h1 {
+    margin-top: 50px;
+    margin-bottom: 20px;
+    font-size: xx-large;
+}
+
+#rt-choose-order button {
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
 

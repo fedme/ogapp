@@ -11,6 +11,9 @@ var app = {
     initialTimeStamp: null,
     data: {
         'uid': 0,
+        'condition': null,
+        'orderFirst': null,
+        'orderSecond': null,
         'duration': 0,
         'date': null,
         'chosenPath': null,
@@ -103,6 +106,31 @@ var app = {
 
         app.buttons[2] = document.getElementById('stats-records');
         app.buttons[2].addEventListener('click', app.SaveDataToFileDialog);
+
+
+        // Conditions
+        //TODO: Refactoring
+        app.buttons[3] = document.getElementById('btn-choose-condition-sgss');
+        app.buttons[3].addEventListener('click', function() { app.data.condition = "sgss"; app.Goto('rt-choose-order'); });
+
+        app.buttons[4] = document.getElementById('btn-choose-condition-ogos');
+        app.buttons[4].addEventListener('click', function() { app.data.condition = "ogos"; app.Goto('rt-choose-order'); });
+
+        app.buttons[5] = document.getElementById('btn-choose-condition-ogss');
+        app.buttons[5].addEventListener('click', function() { app.data.condition = "ogss"; app.Goto('rt-choose-order'); });
+
+        app.buttons[6] = document.getElementById('btn-choose-condition-sgos');
+        app.buttons[6].addEventListener('click', function() { app.data.condition = "sgos"; app.Goto('rt-choose-order'); });
+
+
+        // Order
+        //TODO: Refactoring
+        app.buttons[7] = document.getElementById('btn-choose-order-oq');
+        app.buttons[7].addEventListener('click', function() { app.data.orderFirst = "oq"; app.data.orderSecond = "sm"; app.Goto('rt-map-route'); });
+
+        app.buttons[8] = document.getElementById('btn-choose-order-sm');
+        app.buttons[8].addEventListener('click', function() { app.data.orderFirst = "sm"; app.data.orderSecond = "oq"; app.Goto('rt-map-route'); });
+
     },
 
 
@@ -137,7 +165,7 @@ var app = {
         var topbarUid = document.getElementById('user-id');
         if (topbarUid) topbarUid.innerHTML = 'User ID: ' + app.data.uid;
 
-        app.Goto('rt-map-route');
+        app.Goto('rt-choose-condition');
     },
 
 
@@ -235,7 +263,8 @@ var app = {
         app.data.date = currentTimeStamp;
         app.data.duration = (currentTimeStamp - app.initialTimeStamp) / 1000;
        
-       app.GetDataFromMapRoute();
+        app.GetDataFromMapRoute();
+        app.GetDataFromPathMemory();
 
         app.data.objectsQuestions = OQ.userAnswers;
         app.data.monstersQuestions = MQ.userAnswers;
@@ -258,6 +287,25 @@ var app = {
         app.data.chosenPathIndex = MapRoute.userPathIndex;
         app.data.chosenPath = MapRoute.userPaths[MapRoute.userPathIndex];
         app.data.allPaths = MapRoute.userPaths;
+
+    },
+
+
+    /**
+     * GetDataFromPathMemory()
+     */
+    GetDataFromPathMemory: function() {
+        // Copy data from PathMemory component
+        app.data.spatialMemoryTask = {};
+        app.data.spatialMemoryTask.rememberedPath = PathMemory.rememberedPath;
+        app.data.spatialMemoryTask.rememberedCells = PathMemory.rememberedCells;
+
+        app.data.spatialMemoryTask.rememberedPickedMonsters = PMQ.chosenMonsters;
+
+        app.data.spatialMemoryTask.placements = PathMemory.monsterCells;
+        //TODO: app.data.spatialMemoryTask.correctMonstersCellsNumber = PathMemory.GetCorrectMonstersCellsNumber();
+        //app.data.spatialMemoryTask.correctPlacementsNumber = PathMemory.GetCorrectPlacementsNumber();
+
 
     },
 
@@ -471,6 +519,9 @@ var app = {
         var debugOut = document.getElementById('debug-out');
         debugOut.innerHTML = 
             'uid: ' + app.data.uid + '<br>' +
+            'condition: ' + app.data.condition + '<br>' +
+            'orderFirst: ' + app.data.orderFirst + '<br>' +
+            'orderSecond: ' + app.data.orderSecond + '<br>' +
             'exp duration: ' + app.data.duration + ' seconds <br>' +
             'paths drawn: ' + app.data.allPaths.length + '<br><br>' +
 
@@ -482,7 +533,15 @@ var app = {
             'object questions wrong: ' + app.data.objectsQuestions.wrong + '<br><br>' +
 
             'monsters questions correct: ' + app.data.monstersQuestions.correct + '<br>' +
-            'monsters questions wrong: ' + app.data.monstersQuestions.wrong + '<br><br>';
+            'monsters questions wrong: ' + app.data.monstersQuestions.wrong + '<br><br>' +
+
+            'memory. remembered path length: ' + app.data.spatialMemoryTask.rememberedPath.pathLength + '<br>' +
+            'memory. remembered path turns: ' + app.data.spatialMemoryTask.rememberedPath.pathTurns + '<br>' +
+            'memory. remembered cells number: ' + app.data.spatialMemoryTask.rememberedCells.length + '<br>' +
+            'memory. remembered picked monsters number: ' + app.data.spatialMemoryTask.rememberedPickedMonsters.length + '<br>' +
+
+            '';
+
     },
 
 

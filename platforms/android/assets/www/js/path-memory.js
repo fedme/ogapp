@@ -12,6 +12,7 @@ var PathMemory = {
     instructions: null,
     currentQuestion: 0,
     monsterCells: {}, // will contain association between monsters and their cell
+    tempCell: null,
 
 
     /**
@@ -65,7 +66,9 @@ var PathMemory = {
 
         PathMemory.buttons[2] = document.getElementById('btn-path-memory-start');
         PathMemory.buttons[2].addEventListener('click', function() { app.Goto('rt-map-route') });
-        
+
+        PathMemory.buttons[3] = document.getElementById('btn-path-memory-choose-monster-cell-start');
+        PathMemory.buttons[3].addEventListener('click', function() { app.Goto('rt-map-route') });
 
         
 
@@ -92,6 +95,8 @@ var PathMemory = {
         document.querySelectorAll('#rt-map-route .history')[0].style.display = "none";
         document.getElementById('btn-save-path').style.display = "none";
         document.getElementById('btn-save-path-memory').style.display = "block";
+
+        document.getElementById('table1').style.backgroundImage = "url('./img/map-a-clean.png')";
         PathMemory.instructions.style.display = "block";
 
         // Set instructions
@@ -114,7 +119,7 @@ var PathMemory = {
 
         MapRoute.SetMode('path-memory-choose-monster-cell');
 
-        app.Goto('rt-map-route');
+        app.Goto('rt-path-memory-choose-monster-cell-instr');
     },
 
 
@@ -136,12 +141,34 @@ var PathMemory = {
 
 
     /**
-     * AnswerQuestion()
+     * AnswerQuestionDialog()
      * called by MapRoute in TappedSingleCell()
      */
-    AnswerQuestion: function(cell) {
+    AnswerQuestionDialog: function(cell) {
         if (cell == null) return;
         if (!PathMemory.IsChosenCell(cell)) return;
+
+        PathMemory.tempCell = cell;
+
+        navigator.notification.confirm(
+            'Are you sure you picked the monster there?', // message
+            PathMemory.AnswerQuestion,            // callback to invoke with index of button pressed
+            'Are you sure?',           // title
+            ['Yes','No']     // buttonLabels
+        );
+
+    },
+
+
+    /**
+     * AnswerQuestion()
+     * called by AnswerQuestionDialog()
+     */
+    AnswerQuestion: function(buttonIndex) {
+
+        if (buttonIndex !== 1) return;
+
+        var cell = PathMemory.tempCell;
 
         PathMemory.monsterCells[PathMemory.chosenMonsters[PathMemory.currentQuestion]] = cell;
 
@@ -251,11 +278,48 @@ var PathMemory = {
 
 
     /**
+     * GetCorrectPlacements()
+     */
+    GetCorrectPlacementsNumber: function() {
+        var count = 0;
+        for (var monster in PathMemory.monsterCells) {
+            var cell = PathMemory.monsterCells[monster];
+            if (MapRoute.IsMonsterCellCorrect(monster, cell)) count++;
+        }
+        return count;
+    },
+
+
+    /**
+     * GetCorrectMonstersCellsNumber()
+     */
+    GetCorrectMonstersCellsNumber: function() {
+        var count = 0;
+        var cells = PathMemory.GetChosenCells();
+        for (var i=0; i < cells.length; i++) {
+            var cell = cells[i];
+            if (MapRoute.DoesCellBelongToPAth(cell, PathMemory.rememberedPath)) {
+                // TODO
+            }
+        }
+
+
+    },
+
+
+    /**
      * End()
      */
      End: function() {
         console.log('PathMemory end');
-        app.End();
+
+        if (app.data.orderFirst == "oq") { // PathMemory was second, so start MQ
+            MQ.Start();
+        }
+        else { // PathMemory was first, so start OQ
+            OQ.Start();
+        }
+       
      }
 
 

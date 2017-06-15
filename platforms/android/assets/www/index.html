@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <meta http-equiv="Content-Security-Policy" content="default-src 'self' ws: 'unsafe-inline' data: gap: https://ssl.gstatic.com 'unsafe-eval' ws: 'unsafe-inline'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
+        <meta http-equiv="Content-Security-Policy" content="default-src 'self' ws: 'unsafe-inline' data: gap: https://ssl.gstatic.com 'unsafe-eval'; style-src 'self' 'unsafe-inline'; media-src *; img-src 'self' data: content:;">
         <meta name="format-detection" content="telephone=no">
         <meta name="msapplication-tap-highlight" content="no">
         <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width">
@@ -16,7 +16,7 @@
     </head>
     <body>
 
-        <div id="topbar">OGApp v1.1.0  <span id="stats-records"></span>  <span id="user-id"></span></div>
+        <div id="topbar">OGApp v1.3.0beta  <span id="stats-records"></span>  <span id="user-id"></span></div>
 
         <div id="rt-start" class="route">
             <h1>Enter your code:</h1>
@@ -24,6 +24,22 @@
                 <input type="number" name="uid-input" id="uid-input"><br>
                 <button id="btn-initial-form">Start</button>
             </div>
+        </div>
+
+
+        <div id="rt-choose-condition" class="route">
+            <h1>Choose the condition:</h1>
+            <button id="btn-choose-condition-sgss">SGSS - Self Generation, Self Selection</button>
+            <button id="btn-choose-condition-ogos">OGOS - Other Generation, Other Selection</button>
+            <button id="btn-choose-condition-ogss">OGSS - Other Generation, Self Selection</button>
+            <button id="btn-choose-condition-sgos">SGOS - Self Generation, Other Selection</button>
+        </div>
+
+
+        <div id="rt-choose-order" class="route">
+            <h1>Choose the order:</h1>
+            <button id="btn-choose-order-oq">OQ (Object Questions) First</button>
+            <button id="btn-choose-order-sm">SM (Spatial Memory) First</button>
         </div>
 
 
@@ -99,6 +115,11 @@
         <div id="rt-path-memory-instructions" class="route">
             <h1>And now try to remember your path...</h1>
             <button id="btn-path-memory-start">Next</button>
+        </div>
+
+        <div id="rt-path-memory-choose-monster-cell-instr" class="route">
+            <h1>Now we are going to ask where you picked up those monsters!</h1>
+            <button id="btn-path-memory-choose-monster-cell-start">Next</button>
         </div>
         <!-- /PathMemory component -->
 
