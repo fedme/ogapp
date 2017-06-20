@@ -301,6 +301,7 @@ var app = {
         app.data.spatialMemoryTask.rememberedCells = PathMemory.rememberedCells;
 
         app.data.spatialMemoryTask.rememberedPickedMonsters = PMQ.chosenMonsters;
+        app.data.spatialMemoryTask.correctRememberedPickedMonsters = PMQ.correctRememberedPickedMonsters;
 
         app.data.spatialMemoryTask.placements = PathMemory.monsterCells;
         //TODO: app.data.spatialMemoryTask.correctMonstersCellsNumber = PathMemory.GetCorrectMonstersCellsNumber();
@@ -539,6 +540,7 @@ var app = {
             'memory. remembered path turns: ' + app.data.spatialMemoryTask.rememberedPath.pathTurns + '<br>' +
             'memory. remembered cells number: ' + app.data.spatialMemoryTask.rememberedCells.length + '<br>' +
             'memory. remembered picked monsters number: ' + app.data.spatialMemoryTask.rememberedPickedMonsters.length + '<br>' +
+            'memory. correct remembered picked monsters number: ' + app.data.spatialMemoryTask.correctRememberedPickedMonsters + '<br>' +
 
             '';
 

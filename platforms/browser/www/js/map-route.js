@@ -229,12 +229,7 @@ var MapRoute = {
         console.log('You have chosen path ' + pathIndex);
         MapRoute.userPathIndex = pathIndex;
 
-        if (app.data.orderFirst == "oq") {
-            OQ.Start();
-        }
-        else {
-            PathMemory.Start();
-        }
+        OP.Start();
         
     },
 

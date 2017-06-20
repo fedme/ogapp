@@ -1,6 +1,6 @@
 {
     "name": "de.mpg.isearch.ogapp",
-    "version": "1.3.0",
+    "version": "1.4.0",
     "displayName": "iSearch OG App",
     "cordova": {
         "platforms": [

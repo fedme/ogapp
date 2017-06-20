@@ -8,6 +8,7 @@
         <link rel="stylesheet" type="text/css" href="css/index.css">
         <link rel="stylesheet" type="text/css" href="css/ui.css">
         <link rel="stylesheet" type="text/css" href="css/map-route.css">
+        <link rel="stylesheet" type="text/css" href="css/objects-placement.css">
         <link rel="stylesheet" type="text/css" href="css/objects-questions.css">
         <link rel="stylesheet" type="text/css" href="css/monsters-questions.css">
         <link rel="stylesheet" type="text/css" href="css/path-memory.css">
@@ -16,7 +17,7 @@
     </head>
     <body>
 
-        <div id="topbar">OGApp v1.3.0beta  <span id="stats-records"></span>  <span id="user-id"></span></div>
+        <div id="topbar">OGApp v1.4.0  <span id="stats-records"></span>  <span id="user-id"></span></div>
 
         <div id="rt-start" class="route">
             <h1>Enter your code:</h1>
@@ -69,15 +70,18 @@
         <!-- /MapRoute component -->
 
 
-        <!-- OQ component -->
+        <!-- OP component -->
         <div id="rt-objects-placement" class="route">
             <h2>Experimenter: please place the objects as following:</h2>
             <p>Go Bottom-up and from right to left, row after row</p>
             <button id="btn-show-objects-placement">Show objects placement</button>
             <ul></ul>
-            <button id="btn-go-objects-questions" class="hidden">Go to objects questions</button><br><br><br>
+            <button id="btn-objects-placement-end" class="hidden">I have placed the objects</button><br><br><br>
         </div>
+        <!-- /OP component -->
 
+
+        <!-- OQ component -->
         <div id="rt-objects-questions-instructions" class="route">
             <h1>Are you ready? <br>We are going to ask you some questions...</h1>
             <button id="btn-objects-questions-start">Next</button>
@@ -131,12 +135,10 @@
         </div>
 
         <div id="rt-picked-monsters-questions" class="route">
-            <h1>Have you picked up this monster on your way?</h1>
-            <img>
-            <div class="answer-buttons">
-                <button id="btn-picked-monsters-question-yes">Yes</button>
-                <button id="btn-picked-monsters-question-no">No</button>
-            </div>   
+            <h1>Select the monsters you picked up on your way</h1>
+            <div id="btn-container-1"></div>
+            <div id="btn-container-2"></div>
+            <button id="btn-pmq-end">Done</button> 
         </div>
         <!-- /PMQ component -->
 
@@ -151,6 +153,7 @@
         <script type="text/javascript" src="js/utils.js"></script>
         <script type="text/javascript" src="js/index.js"></script>
         <script type="text/javascript" src="js/map-route.js"></script>
+        <script type="text/javascript" src="js/objects-placement.js"></script>
         <script type="text/javascript" src="js/objects-questions.js"></script>
         <script type="text/javascript" src="js/monsters-questions.js"></script>
         <script type="text/javascript" src="js/path-memory.js"></script>

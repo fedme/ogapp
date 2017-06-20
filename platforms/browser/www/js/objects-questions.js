@@ -62,19 +62,13 @@ var OQ = {
      * Setup()
      */
     Setup: function() {
-        OQ.PreloadImages();
+        //OQ.PreloadImages();
     },
 
     /**
      * SetHandlers()
      */
     SetHandlers: function() {
-
-        OQ.buttons[0] = document.getElementById('btn-show-objects-placement');
-        OQ.buttons[0].addEventListener('click', OQ.ObjectPlacement);
-
-        OQ.buttons[1] = document.getElementById('btn-go-objects-questions');
-        OQ.buttons[1].addEventListener('click', OQ.ObjectQuestionsSetupDialog);
 
         OQ.buttons[2] = document.getElementById('btn-objects-question-yes');
         OQ.buttons[2].addEventListener('click', OQ.AnswerYes);
@@ -94,8 +88,17 @@ var OQ = {
     Start: function() {
         console.log('OQ start');
 
-        app.Goto('rt-objects-placement');
-        
+        OQ.ObjectQuestionsSetup();
+        app.Goto('rt-objects-questions-instructions');
+
+    },
+
+
+    /**
+     * ShuffleObjects()
+     * called by OP.Start()
+     */
+    ShuffleObjects: function() {
         // Shuffle objects and populate objects property
         OQ.objectsPresented = app.ArrayShuffle(OQ.objectsPresented);
 
@@ -105,50 +108,13 @@ var OQ = {
         }
 
         console.log(OQ.monstersObjects);
-
-    },
-
-
-    /**
-     * ObjectPlacement()
-     */
-    ObjectPlacement: function() {
-
-        var list = document.querySelectorAll('#rt-objects-placement ul')[0];
-        list.innerHTML = '';
-        document.body.style.overflowY = 'scroll';
-
-        for (var i=0; i < MQ.monstersPresented.length; i++) {
-            var monster = MQ.monstersPresented[i];
-            var object = OQ.monstersObjects[monster];
-            if (OQ.IsMonsterInUserPath(monster)) {
-                list.innerHTML = list.innerHTML + '<li><img src="img/monsters/' + monster +'.png"><img src="img/objects/' + object +'.jpg"></li>';
-            }  
-        }
-
-        document.getElementById('btn-go-objects-questions').style.display = "inline-block";
-
-    },
-
-
-    /**
-     * ObjectQuestionsSetupDialog()
-     */
-    ObjectQuestionsSetupDialog: function() {
-      navigator.notification.confirm(
-            'Have you placed the objects as showed on the screen?', // message
-            OQ.ObjectQuestionsSetup,            // callback to invoke with index of button pressed
-            'Are you sure?',           // title
-            ['Yes','No']     // buttonLabels
-        );
     },
 
 
     /**
      * ObjectQuestionsSetup()
      */
-    ObjectQuestionsSetup: function(buttonIndex) {
-        if (buttonIndex !== 1) return;
+    ObjectQuestionsSetup: function() {
 
         // concat and shuffle presented and distractor objects
         OQ.objects = OQ.objectsPresented.concat(OQ.objectsDistractors);

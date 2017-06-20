@@ -9,13 +9,8 @@ var PMQ = {
 
     monsters: [], // it gets them from MQ component
     chosenMonsters: [],
-    currentQuestion: 0,
+    correctRememberedPickedMonsters: 0,
     buttons: [],
-    userAnswers: {
-        correct: 0,
-        wrong: 0,
-        answers: []
-    },
     
     
     /**
@@ -63,14 +58,11 @@ var PMQ = {
      */
     SetHandlers: function() {
 
-        PMQ.buttons[0] = document.getElementById('btn-picked-monsters-question-yes');
-        PMQ.buttons[0].addEventListener('click', PMQ.AnswerYes);
+        PMQ.buttons[0] = document.getElementById('btn-picked-monsters-questions-start');
+        PMQ.buttons[0].addEventListener('click', function() { app.Goto('rt-picked-monsters-questions') });
 
-        PMQ.buttons[1] = document.getElementById('btn-picked-monsters-question-no');
-        PMQ.buttons[1].addEventListener('click', PMQ.AnswerNo);
-
-        PMQ.buttons[2] = document.getElementById('btn-picked-monsters-questions-start');
-        PMQ.buttons[2].addEventListener('click', function() { app.Goto('rt-picked-monsters-questions') });
+        PMQ.buttons[1] = document.getElementById('btn-pmq-end');
+        PMQ.buttons[1].addEventListener('click', PMQ.DoneDialog);
 
     },
 
@@ -85,77 +77,83 @@ var PMQ = {
 
         PMQ.monsters = app.ArrayShuffle(PMQ.monsters);
 
-        PMQ.AskQuestion();
+        var container1 = document.getElementById('btn-container-1');
+        var container2 = document.getElementById('btn-container-2');
 
-    },
+        // Create monsters grid
+        for (var i = 0; i < PMQ.monsters.length; i++) {
+            var monster = PMQ.monsters[i];
+            var node = document.createElement('img');
+            node.setAttribute('src', 'img/monsters/' + monster + '.png');
+            node.setAttribute('data-monster', monster);
+            node.setAttribute('data-selected', 'false');
 
+            node.addEventListener('click', PMQ.TappedMonster);
 
-    /**
-     * GetChosenMonsters()
-     */
-    GetChosenMonsters: function() {
-        return PMQ.chosenMonsters;
-    },
-
-
-    /**
-     * AskQuestion()
-     */
-    AskQuestion: function() {
-
-        if (PMQ.currentQuestion > 11) return PMQ.End();
-        var img = document.querySelectorAll('#rt-picked-monsters-questions img')[0];
-        var monster = PMQ.monsters[PMQ.currentQuestion];
-        img.setAttribute('src', 'img/monsters/' + monster + '.png');
-    },
-
-
-    /**
-     * AnswerYes()
-     */
-    AnswerYes: function() {
-        PMQ.Answer(true);
-    },
-
-
-    /**
-     * AnswerNo()
-     */
-    AnswerNo: function() {
-        PMQ.Answer(false);
-    },
-
-
-    /**
-     * Answer()
-     */
-    Answer: function(answer) {
-        var monster = PMQ.monsters[PMQ.currentQuestion];
-
-        if (answer) {
-            PMQ.chosenMonsters.push(monster);
+            if (i < PMQ.monsters.length / 2) {
+                container1.appendChild(node);
+            }
+            else {
+                container2.appendChild(node);
+            }
+            
         }
 
-        var isCorrect = PMQ.CheckAnswer(answer, PMQ.IsMonsterPicked(monster));
-        PMQ.userAnswers.answers.push({
-            'object': monster,
-            'answer': answer,
-            'isPicked': PMQ.IsMonsterPicked(monster),
-            'isCorrect': isCorrect
-        });
-
-        if (isCorrect) PMQ.userAnswers.correct++;
-        else PMQ.userAnswers.wrong++;
-
-        PMQ.currentQuestion++;
-        PMQ.AskQuestion();
     },
 
 
     /**
-     * IsMonsterPicked()
+     * TappedMonster()
      */
-    IsMonsterPicked: function(monster) {
+    TappedMonster: function(evt) {
+        var selected = (evt.target.getAttribute('data-selected') == "false") ? true : false;
+        evt.target.setAttribute('data-selected', selected);
+    },
+
+
+    /**
+     * DoneDialog()
+     */
+    DoneDialog: function() {
+        navigator.notification.confirm(
+            'Are you sure?', // message
+            PMQ.DoneDialogCallback,            // callback to invoke with index of button pressed
+            'Are you sure"',           // title
+            ['Yes','No']     // buttonLabels
+        );
+    },
+
+
+    /**
+     * DoneDialogCallback
+     */
+    DoneDialogCallback: function(buttonIndex) {
+        if (buttonIndex !== 1) return;
+
+        PMQ.ParseChosenMonsters();
+        PMQ.End();
+    },
+
+
+    /**
+     * ParseChosenMonsters()
+     */
+    ParseChosenMonsters: function() {
+        var nodes = document.querySelectorAll('#rt-picked-monsters-questions img[data-selected="true"]');
+        for (var i = 0; i < nodes.length; i++) {
+            var monster = nodes[i].getAttribute('data-monster');
+            PMQ.chosenMonsters.push(monster);
+            if (PMQ.WasPickedMonster(monster)) {
+                PMQ.correctRememberedPickedMonsters++;
+            }
+        }
+    },
+
+
+    /**
+     * WasPickedMonster()
+     */
+    WasPickedMonster: function(monster) {
         if (monster === null) return false;
 
         var answer = false;
@@ -173,10 +171,10 @@ var PMQ = {
 
 
     /**
-     * CheckAnswer()
+     * GetChosenMonsters()
      */
-    CheckAnswer: function(answer, realAnswer) {
-        return answer === realAnswer;
+    GetChosenMonsters: function() {
+        return PMQ.chosenMonsters;
     },
 
 

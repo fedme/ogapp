@@ -12,22 +12,29 @@
 
 #rt-picked-monsters-questions {
     margin: auto;
-    width: 60%;
+    width: 90%;
     text-align: center;
 }
 
 #rt-picked-monsters-questions img {
     display: inline-block;
-    padding: 25px;
-    width: 420px;
-    height: 420px;
+    margin: 15px;
+    width: 120px;
+    height: 120px;
 }
 
 #rt-picked-monsters-questions h1 {
     margin-top: 30px;
 }
 
-#btn-picked-monsters-question-no {
-    margin-left: 100px;
-    background-color: darkred;
+#rt-picked-monsters-questions img {
+    border: 7px solid transparent;
+}
+
+#rt-picked-monsters-questions img[data-selected="true"] {
+    border-color: red;
+}
+
+#rt-picked-monsters-questions img[data-selected="false"] {
+    border-color: transparent;
 }
