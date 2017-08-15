@@ -447,7 +447,8 @@ var app = {
                 var filename = "data-" + day + month + currentdate.getFullYear() + "-"  + currentdate.getHours() + currentdate.getMinutes() + ".json";
                 console.log(filename);
 
-                // access file system
+                
+// access file system
                 window.resolveLocalFileSystemURL(cordova.file.externalDataDirectory, 
                     function(fs) {
 
@@ -471,7 +472,6 @@ var app = {
                         console.log(JSON.stringify(evt));
                     }
                 );
-
             }
 
         // SQL error callback
