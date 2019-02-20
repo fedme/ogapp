@@ -1,0 +1,8 @@
+{
+  "name": "ogapp",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular",
+  "id": "3acfa08b"
+}
