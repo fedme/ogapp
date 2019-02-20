@@ -64,11 +64,13 @@ export class OGAppService implements IExperiment {
 
   public getExperimentData() {
 
-    // TODO: fill data
-
-    const data = {
-      
-    };
+    let data = {};
+    try {
+      data = JSON.parse(localStorage.getItem('isrc-ogapp-data'));
+    }
+    catch(err) {
+      console.log('ERROR parsing JSON data from localStorage', err)
+    }
 
     return data;
   }

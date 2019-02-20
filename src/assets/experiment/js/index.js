@@ -49,6 +49,7 @@ var app = {
             case 'deviceready':
                 this.Setup();
                 app.SetHandlers();
+                app.CheckRegistrationOverride();
                 break;
         }
 
@@ -103,8 +104,8 @@ var app = {
         app.buttons[0] = document.getElementById('btn-initial-form');
         app.buttons[0].addEventListener('click', app.InitialFormSubmit);
 
-        app.buttons[1] = document.getElementById('btn-app-restart');
-        app.buttons[1].addEventListener('click', app.Restart);
+        //app.buttons[1] = document.getElementById('btn-app-restart');
+        //app.buttons[1].addEventListener('click', app.Restart);
 
         app.buttons[2] = document.getElementById('stats-records');
         //app.buttons[2].addEventListener('click', app.SaveDataToFileDialog);
@@ -168,6 +169,16 @@ var app = {
         if (topbarUid) topbarUid.innerHTML = 'User ID: ' + app.data.uid;
 
         app.Goto('rt-choose-condition');
+    },
+
+    CheckRegistrationOverride: function() {
+        var embeddedMode = localStorage.getItem('isrc-ogapp-embedded-mode');
+        var userId = localStorage.getItem('isrc-ogapp-uid');
+        if (embeddedMode != null && embeddedMode == 'true') {
+            app.data.uid = userId;
+            app.initialTimeStamp = new Date();
+            app.Goto('rt-choose-condition');
+        }
     },
 
 
@@ -274,7 +285,10 @@ var app = {
         console.log('# Saving Data...');
         console.log(app.data);
 
-        app.SaveDataToDb();
+        localStorage.setItem('isrc-ogapp-ended', 'true');
+        localStorage.setItem('isrc-ogapp-data', JSON.stringify(app.data));
+
+        //app.SaveDataToDb();
 
         app.PrintDataDebug();
         

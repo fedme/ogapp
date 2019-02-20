@@ -259,6 +259,11 @@ var PathMemory = {
         //     ['Yes','No']     // buttonLabels
         // );
 
+        var cells = document.querySelectorAll('td[data-path-memory-selected="1"]');
+        if (cells.length < 1) {
+            return alert('You MUST select at least one cell!');
+        }
+
         if (window.confirm("Save the selected cells?")) { 
             PathMemory.SaveRememberedCells(1);
         }

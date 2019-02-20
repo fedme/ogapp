@@ -25,8 +25,6 @@ export class RegistrationPage implements OnInit {
 
   ngOnInit() {
 
-    // TODO: Make sure ngOnInit is called every time the user navigates to this page!
-
     // Create a new Participant
     this.app.participant = new Participant()
 
@@ -34,6 +32,10 @@ export class RegistrationPage implements OnInit {
     this.dataService.updateRecordsNumber();
 
     console.log('[RegistrationPage] ngOnInit()');
+
+    // Set embedded mode
+    localStorage.setItem('isrc-ogapp-embedded-mode', 'true');
+    localStorage.setItem('isrc-ogapp-uid', 'no-code');
   }
 
   public handleRegistration(): void {
@@ -99,6 +101,7 @@ export class RegistrationPage implements OnInit {
   }
 
   private async doRegistration(): Promise<void> {
+    localStorage.setItem('isrc-ogapp-uid', this.app.participant.code);
     this.app.setupExperiment();
     await this.navCtrl.navigateRoot('/experiment');
   }
